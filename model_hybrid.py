@@ -17,7 +17,7 @@ from hybrid import CharAlignHybridEmbedding
 from tfutils import SaveBestModelOnMemory
 
 # 字词混合Embedding
-# 93%+
+# 93.5%+
 
 # 处理数据
 X, y, classes = load_THUCNews_title_label()
@@ -34,32 +34,21 @@ tokenizer.fit_in_parallel(X_train)
 # maxlen = find_best_maxlen(X_train, mode="max")
 maxlen = 48
 
+def pad(X, maxlen):
+    return sequence.pad_sequences(
+      X,
+      maxlen=maxlen,
+      dtype="int32",
+      padding="post",
+      truncating="post",
+      value=0
+    )
+
 def create_dataset(X, y, maxlen):
-    Xc, Xw, Xs = tokenizer.transform(X)
-    Xc = sequence.pad_sequences(
-      Xc,
-      maxlen=maxlen,
-      dtype="int32",
-      padding="post",
-      truncating="post",
-      value=0
-    )
-    Xw = sequence.pad_sequences(
-      Xw,
-      maxlen=maxlen,
-      dtype="int32",
-      padding="post",
-      truncating="post",
-      value=0
-    )
-    Xs = sequence.pad_sequences(
-      Xs,
-      maxlen=maxlen,
-      dtype="int32",
-      padding="post",
-      truncating="post",
-      value=0
-    )
+    Xc, Xw, Xs = tokenizer.transform_in_parallel(X)
+    Xc = pad(Xc, maxlen)
+    Xw = pad(Xw, maxlen)
+    Xs = pad(Xs, maxlen)
     y = tf.keras.utils.to_categorical(y)
     return Xc, Xw, Xs, y
 

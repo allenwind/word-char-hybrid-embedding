@@ -54,7 +54,9 @@ class CharAlignHybridEmbedding(tf.keras.layers.Layer):
             xs = 0.0
 
         if self.hybridmerge == "add":
-            x = xc + xw + xs
+            u = 2.0 if self.without_segment_embedding else 3.0
+            # 叠加后要scale会原来区间
+            x = xc + xw + xs / u
         else:
             x = tf.concat([xc, xw, xs], axis=-1)
             # 融合三个Embedding信息

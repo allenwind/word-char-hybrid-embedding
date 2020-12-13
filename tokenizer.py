@@ -103,6 +103,47 @@ class Tokenizer:
             wsgs.append(wsg)
         return ids, wids, wsgs
 
+    def transform_in_parallel(self, X):
+        ids = []
+        for sentence in X:
+            s = []
+            for char in sentence:
+                s.append(self.char2id.get(char, self.UNKNOW))
+            s = np.array(s, dtype=np.int32)
+            ids.append(s)
+
+        if not self.cutword:
+            return ids
+
+        from parallel import tokenize_in_parallel
+        import jieba
+
+        tokens = tokenize_in_parallel(
+            tokenize=jieba.lcut,
+            generator=iter(X),
+            processes=7,
+            maxsize=300,
+        )
+
+        wids = [] # 词ID序列
+        wsgs = [] # 词切分ID序列
+        for sentence in tokens:
+            wid = []
+            wl = []
+            for word in sentence:
+                w = self.char2id.get(word, self.UNKNOW)
+                wid.append(w)
+                wl.append(len(word))
+            # 字词ID对齐
+            wid = np.array(wid, dtype=np.int32)
+            w = np.repeat(wid, wl)
+            wids.append(w)
+
+            # segment ID对齐
+            wsg = np.repeat(np.arange(1, len(wid)+1, dtype=np.int32), wl)
+            wsgs.append(wsg)
+        return ids, wids, wsgs
+
     def fit_transform(self, X):
         self.fit(X)
         return self.transform(X)
