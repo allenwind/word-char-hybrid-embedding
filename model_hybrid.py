@@ -107,7 +107,7 @@ model.summary()
 
 # 训练
 batch_size = 32
-epochs = 5
+epochs = 30
 callbacks = [SaveBestModelOnMemory()]
 model.fit(
     [Xc_train, Xw_train, Xs_train],
