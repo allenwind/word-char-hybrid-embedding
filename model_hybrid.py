@@ -36,13 +36,13 @@ maxlen = 48
 
 def pad(X, maxlen):
     return sequence.pad_sequences(
-      X,
-      maxlen=maxlen,
-      dtype="int32",
-      padding="post",
-      truncating="post",
-      value=0
-    )
+        X,
+        maxlen=maxlen,
+        dtype="int32",
+        padding="post",
+        truncating="post",
+        value=0
+        )
 
 def create_dataset(X, y, maxlen):
     Xc, Xw, Xs = tokenizer.transform_in_parallel(X)
