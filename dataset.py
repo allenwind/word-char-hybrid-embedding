@@ -108,10 +108,11 @@ def load_company_jobs(file=_jobs):
     return X, y, categoricals
 
 _LCQMC = "/home/zhiwen/workspace/dataset/LCQMC/totals.txt"
-def load_lcqmc(file=_LCQMC):
+def load_lcqmc(file=_LCQMC, shuffle=True):
     with open(file, encoding="utf-8") as fd:
         lines = fd.readlines()
-    random.shuffle(lines)
+    if shuffle:
+        random.shuffle(lines)
     X1 = []
     X2 = []
     y = []
