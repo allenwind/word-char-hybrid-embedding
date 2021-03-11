@@ -49,7 +49,7 @@ class Tokenizer:
             self.char2id[c] = i
 
     def fit_generator(self, gen):
-        self.fit([gen])
+        self.fit(*[gen])
 
     def fit_in_parallel(self, gen):
         # 并行地构建词表，词频统计上和fit有少许差别
