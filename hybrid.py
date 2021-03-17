@@ -19,9 +19,9 @@ class CharAlignHybridEmbedding(tf.keras.layers.Layer):
         self.hybridmerge = hybridmerge if hybridmerge in ("add", "concat") else "add"
         self.max_segment_length = max_segment_length # 词的最大字长度
         self.without_segment_embedding = without_segment_embedding
-        self.embeddings_initializer = tf.keras.initializers.get(
-            embeddings_initializer
-        )
+        if isinstance(embeddings_initializer, str):
+            embeddings_initializer = tf.keras.initializers.get(embeddings_initializer)
+        self.embeddings_initializer = embeddings_initializer
 
     def build(self, input_shape):
         self.embeddings = Embedding(

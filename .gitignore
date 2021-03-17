@@ -1,6 +1,7 @@
 # self
 TODO.py
 model_match_*
+weights/*.hdf5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
