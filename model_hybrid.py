@@ -82,6 +82,7 @@ pembedding = PositionEmbedding(
 x = hybridembedding([c_input, w_input, s_input])
 p = pembedding(x)
 x = p + x
+x = LayerNormalization()(x)
 x = Dropout(0.1)(x)
 x = Conv1D(filters=128,
            kernel_size=2,
